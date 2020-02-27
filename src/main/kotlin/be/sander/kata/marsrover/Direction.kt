@@ -1,27 +1,23 @@
 package be.sander.kata.marsrover
 
-import java.lang.IllegalArgumentException
+enum class Direction {
+    NORTH {
+        override fun getLeft() = WEST
+        override fun getRight() = EAST
+    },
+    EAST {
+        override fun getLeft() = NORTH
+        override fun getRight() = SOUTH
+    },
+    SOUTH {
+        override fun getLeft() = EAST
+        override fun getRight() = WEST
+    },
+    WEST {
+        override fun getLeft() = SOUTH
+        override fun getRight() = NORTH
+    };
 
-enum class Direction(val qualifier: Int, val left: Int, val right: Int) {
-    NORTH(1, 4, 2),
-    EAST(2, 1, 3),
-    SOUTH(3, 2, 4),
-    WEST(4, 3, 1);
-
-    fun getLeft(): Direction {
-        return of(this.left);
-    }
-
-    fun getRight(): Direction {
-        return of(this.right);
-    }
-
-    private fun of(qualifier: Int): Direction {
-        val direction = values().find { direction -> direction.qualifier == qualifier }
-        if(direction != null){
-            return direction
-        }
-
-        throw IllegalArgumentException("Could not determine Direction for $qualifier")
-    }
+    abstract fun getLeft(): Direction
+    abstract fun getRight(): Direction
 }

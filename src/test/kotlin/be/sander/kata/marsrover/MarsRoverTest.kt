@@ -7,59 +7,43 @@ import org.junit.jupiter.api.Test
 internal class MarsRoverTest {
 
     @Test
-    internal fun `create | default | mars rover starts at x=0 and y=0`() {
-        val actual = MarsRover();
+    internal fun `create | default | mars rover starts at x=0, y=0, facing NORTH`() {
+        val actual = MarsRover()
+        val expected = MarsRover(Position(), NORTH)
 
-        assertThat(actual.getPosition()).isEqualTo(Position());
+        assertThat(actual).isEqualTo(expected)
     }
 
     @Test
-    internal fun `create | default | mars rover is facing NORTH`() {
-        val actual = MarsRover();
+    internal fun `turn left | when facing north | then mars rover is facing west and position is unaffected`() {
+        val actual = MarsRover(direction = NORTH)
+        val expected = MarsRover(direction = WEST)
 
-        assertThat(actual.getDirection()).isEqualTo(NORTH);
+        assertThat(actual.turnLeft()).isEqualTo(expected)
     }
 
     @Test
-    internal fun `turn left | when facing north | then mars rover is facing west `() {
-        val actual = MarsRover(direction = NORTH);
+    internal fun `turn right | when facing north | then mars rover is facing east and position is unaffected`() {
+        val actual = MarsRover(direction = NORTH)
+        val expected = MarsRover(direction = EAST)
 
-        assertThat(actual.turnLeft().getDirection()).isEqualTo(WEST);
+        assertThat(actual.turnRight()).isEqualTo(expected)
     }
 
     @Test
-    internal fun `turn left | only affects direction, not position`() {
-        val actual = MarsRover();
+    internal fun `move forward | given 0,0 and direction NORTH | move to 0,1 and direction is unaffected`() {
+        val actual = MarsRover(Position(0, 0), NORTH)
+        val expected = MarsRover(Position(0, 1), NORTH)
 
-        assertThat(actual.turnLeft().getPosition()).isEqualTo(actual.getPosition());
+        assertThat(actual.moveForward()).isEqualTo(expected)
     }
 
     @Test
-    internal fun `turn right | when facing north | then mars rover is facing east `() {
-        val actual = MarsRover(direction = NORTH);
-
-        assertThat(actual.turnRight().getDirection()).isEqualTo(EAST);
-    }
-
-    @Test
-    internal fun `turn right | only affects direction, not position`() {
-        val actual = MarsRover();
-
-        assertThat(actual.turnRight().getPosition()).isEqualTo(actual.getPosition());
-    }
-
-    @Test
-    internal fun `move forward | given 0,0 and direction NORTH | move to 0,1`() {
+    internal fun `move backwards | given 0,0 and direction NORTH | move to 0,-1 | direction NORTH`() {
         val marsRover = MarsRover(Position(0, 0), NORTH)
+        val expected = MarsRover(Position(0, -1), NORTH)
 
-        assertThat(marsRover.moveForward()).isEqualTo(MarsRover(Position(0, 1), NORTH))
-    }
-
-    @Test
-    internal fun `move backwards | given 0,0 and direction NORTH | move to 0,-1`() {
-        val marsRover = MarsRover(Position(0, 0), NORTH)
-
-        assertThat(marsRover.moveBackward()).isEqualTo(MarsRover(Position(0, -1), NORTH))
+        assertThat(marsRover.moveBackward()).isEqualTo(expected)
     }
 
     @Test
@@ -71,8 +55,9 @@ internal class MarsRoverTest {
                 .moveBackward()
                 .moveBackward()
                 .turnRight()
-                .turnRight();
+                .turnRight()
+        val expected = MarsRover(Position(2, 2), EAST)
 
-        assertThat(actual).isEqualTo(MarsRover(Position(2,2), EAST))
+        assertThat(actual).isEqualTo(expected)
     }
 }
